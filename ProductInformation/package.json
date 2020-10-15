@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jcarvalho92/Enterprise-Techs/issues"
   },
-  "homepage": "https://github.com/jcarvalho92/Enterprise-Techs#readme"
+  "homepage": "https://github.com/jcarvalho92/Enterprise-Techs#readme",
+  "dependencies": {
+    "seneca": "^3.22.0"
+  }
 }
