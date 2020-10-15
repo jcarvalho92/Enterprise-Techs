@@ -1,0 +1,19 @@
+{
+  "name": "productinformation",
+  "version": "1.0.0",
+  "description": "Assignment 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt validate --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcarvalho92/Enterprise-Techs.git"
+  },
+  "author": "Abdeali Mody and Juliana de Carvalho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jcarvalho92/Enterprise-Techs/issues"
+  },
+  "homepage": "https://github.com/jcarvalho92/Enterprise-Techs#readme"
+}
