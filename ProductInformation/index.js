@@ -1,43 +1,54 @@
 
+const port = 3000
+const host = '127.0.0.1';
+
 //Joi class to define a schema (minimum/maximum of characteres etc)
-const Joi = require('joi'); //Pascal name convention for classes
+const Joi = require('joi'); 
+
+const logger = require('./logger')
 
 const express = require('express');
 const app = express();
-
-//adding a piece of midleware 
 app.use(express.json());
+app.use(logger);
 
-//testing using an array
+
+
 const products = [
-    {id: 1, productName: 'a', price:  100, category: "test"},
-    {id: 2, productName: 'b', price:  200, category: "test"},
-    {id: 3, productName: 'c', price:  300, category: "test"},
+    {id: 1, productName: 'Laptop Asus', price:  400, category: "PC"},
+    {id: 2, productName: 'Iphone 11', price:  1200, category: "Cell Phone"},
+
 ]
 
-//defining the route
+
 //GET REQUESTS 
+
+//all products
 app.get('/api/products', (req, res) => {
+
     res.send(products);
 });
 
+//using id
 app.get('/api/products/:id', (req, res) =>{
     const product = products.find(c => c.id === parseInt(req.params.id));
 
     if(!product) 
         res.status(404).send('The product with the given ID was not found');
+
     res.send(product);
+    
 });
 
 //POST REQUESTS
-app.post('/api/products', (req,res) =>{
+app.post('/api/products', async (req,res)  =>{
     //validanting the input
     const schema = Joi.object({ productName: Joi.string() .min(3) .required(),
         price: Joi.number() .required(),
         category: Joi.string() .min(2) .required() });
         
     const result = schema.validate(req.body);
-    
+
     if (result.error){
         //400 bad request
         res.status(400).send(result.error.details[0].message);
@@ -50,24 +61,43 @@ app.post('/api/products', (req,res) =>{
         price: req.body.price,
         category: req.body.category
     };
+    //storing the data in-memory 
     products.push(product);
-    //return in the body
+
     res.send(product);
+    
 })
 
 //DELETE REQUESTS
+
+//deleting all
+app.delete('/api/products',(req,res) => {
+    products.splice(0,products.length);
+
+    res.send(products);
+    
+});
+
+//deleting using a specific id
 app.delete('/api/products/:id',(req,res) => {
     const product = products.find(c => c.id === parseInt(req.params.id));
 
     if(!product) 
         res.status(404).send('The product with the given ID was not found');
     
-
     const index = products.indexOf(product);
+    //index is the start and 1 is the end indicating the number of elements in the array to remove from start
     products.splice(index,1);
+
     res.send(product);
+    
 });
 
-const port = 3000
-app.listen(port,() => console.log(`Listening on port ${port}...`)); //Log the information on start-up
 
+//Log the information on start-up
+app.listen(port, host, function () {
+    console.log("Server listening on: " + host + ":" + port);
+    console.log("Endpoints: ")  
+    console.log(host + ":" + port+"/api/products  method: GET, POST, DELETE" );
+  
+});
